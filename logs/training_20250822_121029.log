@@ -1,0 +1,44 @@
+2025-08-22 12:10:29,709 - INFO - ==================================================
+2025-08-22 12:10:29,709 - INFO - INICIANDO SCRIPT DE TREINAMENTO - RUN ID: 20250822_121029
+2025-08-22 12:10:29,710 - INFO - ==================================================
+2025-08-22 12:10:29,711 - INFO - Carregando dados de 'data/train.csv'...
+2025-08-22 12:10:30,499 - INFO - Dados carregados com sucesso. Shape: (1017209, 9)
+2025-08-22 12:10:30,499 - INFO - Iniciando pré-processamento dos dados com janela de 7 dias...
+2025-08-22 12:10:30,499 - INFO - Iniciando pré-processamento com window_size=7.
+2025-08-22 12:10:30,499 - INFO - Ordenando dados por 'Store' e 'Date'...
+2025-08-22 12:10:30,694 - INFO - Iniciando engenharia de features...
+2025-08-22 12:10:30,701 - INFO - Features 'StateHoliday' e 'SchoolHoliday' convertidas para binário.
+2025-08-22 12:10:30,712 - INFO - Feature '7_days_avg_sales' (média móvel) criada.
+2025-08-22 12:10:30,712 - INFO - Engenharia de features concluída.
+2025-08-22 12:10:30,713 - INFO - Colunas após engenharia de features: ['Store', 'DayOfWeek', 'Date', 'Sales', 'Customers', 'Open', 'Promo', 'StateHoliday', 'SchoolHoliday', '7_days_avg_sales']
+2025-08-22 12:10:30,714 - INFO - Normalizando as features ['DayOfWeek', 'Customers', 'Open', 'Promo', '7_days_avg_sales'] e o target 'Sales' com MinMaxScaler.
+2025-08-22 12:10:30,734 - INFO - Iniciando criação de sequências para o modelo LSTM...
+2025-08-22 12:10:30,735 - INFO - Encontradas 10 lojas únicas para processar.
+2025-08-22 12:10:35,565 - INFO - Criação de sequências concluída. Total de 9350 sequências geradas.
+2025-08-22 12:10:35,570 - INFO - Salvando o objeto scaler em 'artifacts/scaler_20250822_121029.pkl'...
+2025-08-22 12:10:35,571 - INFO - Scaler salvo com sucesso.
+2025-08-22 12:10:35,576 - INFO - Pré-processamento concluído. Shape de X: (9350, 7, 5), Shape de y: (9350,)
+2025-08-22 12:10:35,576 - INFO - Dividindo os dados em conjuntos de treino e validação (80/20)...
+2025-08-22 12:10:35,576 - INFO - Divisão concluída. Shapes: X_train=(6545, 7, 5), y_train=(6545,), X_val=(1402, 7, 5), y_val=(1402,)
+2025-08-22 12:10:35,576 - INFO - O melhor modelo será salvo em: artifacts/best_model_20250822_121029.h5
+2025-08-22 12:10:35,577 - INFO - Configurando callbacks: EarlyStopping e ModelCheckpoint.
+2025-08-22 12:10:35,577 - INFO - Construindo modelo com input_shape: (7, 5)
+2025-08-22 12:10:36,970 - ERROR - Ocorreu um erro durante a execução: Trainer.compile() got an unexpected keyword argument 'lloss'
+Traceback (most recent call last):
+  File "/home/workstation/MLOps/MLOps-Practice-1/src/train.py", line 99, in <module>
+    model, history = train_model(X_train, y_train, X_val, y_val, model_path=model_path)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/MLOps/MLOps-Practice-1/src/train.py", line 53, in train_model
+    model = build_model((X_train.shape[1], X_train.shape[2]))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/MLOps/MLOps-Practice-1/src/train.py", line 41, in build_model
+    model.compile(optimizer='adam', lloss=tf.keras.losses.MeanSquaredError())
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/utils/traceback_utils.py", line 122, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/utils/tracking.py", line 26, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+TypeError: Trainer.compile() got an unexpected keyword argument 'lloss'
+2025-08-22 12:10:36,976 - INFO - ==================================================
+2025-08-22 12:10:36,976 - INFO - EXECUÇÃO DO SCRIPT FINALIZADA
+2025-08-22 12:10:36,976 - INFO - ==================================================

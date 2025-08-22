@@ -1,0 +1,80 @@
+2025-08-22 12:06:36,765 - INFO - ==================================================
+2025-08-22 12:06:36,765 - INFO - INICIANDO SCRIPT DE TREINAMENTO - RUN ID: 20250822_120636
+2025-08-22 12:06:36,765 - INFO - ==================================================
+2025-08-22 12:06:36,765 - INFO - Carregando dados de 'data/train.csv'...
+2025-08-22 12:06:37,553 - INFO - Dados carregados com sucesso. Shape: (1017209, 9)
+2025-08-22 12:06:37,554 - INFO - Iniciando pré-processamento dos dados com janela de 7 dias...
+2025-08-22 12:06:37,554 - INFO - Iniciando pré-processamento com window_size=7.
+2025-08-22 12:06:37,554 - INFO - Ordenando dados por 'Store' e 'Date'...
+2025-08-22 12:06:37,742 - INFO - Iniciando engenharia de features...
+2025-08-22 12:06:37,752 - INFO - Features 'StateHoliday' e 'SchoolHoliday' convertidas para binário.
+2025-08-22 12:06:37,760 - INFO - Feature '7_days_avg_sales' (média móvel) criada.
+2025-08-22 12:06:37,761 - INFO - Engenharia de features concluída.
+2025-08-22 12:06:37,761 - INFO - Colunas após engenharia de features: ['Store', 'DayOfWeek', 'Date', 'Sales', 'Customers', 'Open', 'Promo', 'StateHoliday', 'SchoolHoliday', '7_days_avg_sales']
+2025-08-22 12:06:37,761 - INFO - Normalizando as features ['DayOfWeek', 'Customers', 'Open', 'Promo', '7_days_avg_sales'] e o target 'Sales' com MinMaxScaler.
+2025-08-22 12:06:37,772 - INFO - Iniciando criação de sequências para o modelo LSTM...
+2025-08-22 12:06:37,773 - INFO - Encontradas 10 lojas únicas para processar.
+2025-08-22 12:06:42,543 - INFO - Criação de sequências concluída. Total de 9350 sequências geradas.
+2025-08-22 12:06:42,549 - INFO - Salvando o objeto scaler em 'artifacts/scaler_20250822_120636.pkl'...
+2025-08-22 12:06:42,550 - INFO - Scaler salvo com sucesso.
+2025-08-22 12:06:42,554 - INFO - Pré-processamento concluído. Shape de X: (9350, 7, 5), Shape de y: (9350,)
+2025-08-22 12:06:42,554 - INFO - Dividindo os dados em conjuntos de treino e validação (80/20)...
+2025-08-22 12:06:42,555 - INFO - Divisão concluída. Shapes: X_train=(6545, 7, 5), y_train=(6545,), X_val=(1402, 7, 5), y_val=(1402,)
+2025-08-22 12:06:42,555 - INFO - O melhor modelo será salvo em: artifacts/best_model_20250822_120636.h5
+2025-08-22 12:06:42,555 - INFO - Configurando callbacks: EarlyStopping e ModelCheckpoint.
+2025-08-22 12:06:42,555 - INFO - Construindo modelo com input_shape: (7, 5)
+2025-08-22 12:06:44,022 - INFO - Modelo compilado com otimizador 'adam' e loss 'mse'.
+2025-08-22 12:06:44,022 - INFO - Arquitetura do modelo:
+2025-08-22 12:06:44,027 - INFO - Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ lstm (LSTM)                          │ (None, 50)                  │          11,200 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense (Dense)                        │ (None, 1)                   │              51 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 11,251 (43.95 KB)
+ Trainable params: 11,251 (43.95 KB)
+ Non-trainable params: 0 (0.00 B)
+
+2025-08-22 12:06:44,028 - INFO - Iniciando o treinamento do modelo...
+2025-08-22 12:06:48,038 - WARNING - You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. 
+2025-08-22 12:06:48,094 - INFO - Treinamento concluído.
+2025-08-22 12:06:48,095 - INFO - Treino finalizado. Melhor 'val_loss' alcançada: 0.0094
+2025-08-22 12:06:48,095 - INFO - Iniciando a Avaliação do modelo
+2025-08-22 12:06:48,095 - INFO - ==================================================
+2025-08-22 12:06:48,095 - INFO - INICIANDO AVALIAÇÃO DO MODELO
+2025-08-22 12:06:48,095 - INFO - ==================================================
+2025-08-22 12:06:48,095 - INFO - Carregando modelo do caminho: artifacts/best_model_20250822_120636.h5
+2025-08-22 12:06:48,149 - ERROR - Ocorreu um erro durante a avaliação: Could not locate function 'mse'. Make sure custom classes are decorated with `@keras.saving.register_keras_serializable()`. Full object config: {'module': 'keras.metrics', 'class_name': 'function', 'config': 'mse', 'registered_name': 'mse'}
+Traceback (most recent call last):
+  File "/home/workstation/MLOps/MLOps-Practice-1/src/evaluate.py", line 23, in evaluate_model
+    model = tf.keras.models.load_model(model_path)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/saving/saving_api.py", line 196, in load_model
+    return legacy_h5_format.load_model_from_hdf5(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/legacy/saving/legacy_h5_format.py", line 155, in load_model_from_hdf5
+    **saving_utils.compile_args_from_training_config(
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/legacy/saving/saving_utils.py", line 146, in compile_args_from_training_config
+    loss = _deserialize_nested_config(losses.deserialize, loss_config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/legacy/saving/saving_utils.py", line 205, in _deserialize_nested_config
+    return deserialize_fn(config)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/losses/__init__.py", line 155, in deserialize
+    return serialization_lib.deserialize_keras_object(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/saving/serialization_lib.py", line 575, in deserialize_keras_object
+    return deserialize_keras_object(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/saving/serialization_lib.py", line 678, in deserialize_keras_object
+    return _retrieve_class_or_fn(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/workstation/.local/lib/python3.11/site-packages/keras/src/saving/serialization_lib.py", line 810, in _retrieve_class_or_fn
+    raise TypeError(
+TypeError: Could not locate function 'mse'. Make sure custom classes are decorated with `@keras.saving.register_keras_serializable()`. Full object config: {'module': 'keras.metrics', 'class_name': 'function', 'config': 'mse', 'registered_name': 'mse'}
+2025-08-22 12:06:48,154 - INFO - ==================================================
+2025-08-22 12:06:48,154 - INFO - EXECUÇÃO DO SCRIPT FINALIZADA
+2025-08-22 12:06:48,155 - INFO - ==================================================

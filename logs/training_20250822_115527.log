@@ -1,0 +1,19 @@
+2025-08-22 11:55:27,465 - INFO - ==================================================
+2025-08-22 11:55:27,465 - INFO - INICIANDO SCRIPT DE TREINAMENTO - RUN ID: 20250822_115527
+2025-08-22 11:55:27,465 - INFO - ==================================================
+2025-08-22 11:55:27,466 - INFO - Carregando dados de 'data/train.csv'...
+2025-08-22 11:55:28,111 - INFO - Dados carregados com sucesso. Shape: (1017209, 9)
+2025-08-22 11:55:28,111 - INFO - Iniciando pré-processamento dos dados com janela de 7 dias...
+2025-08-22 11:55:28,111 - INFO - Iniciando pré-processamento com window_size=7.
+2025-08-22 11:55:28,111 - INFO - Ordenando dados por 'Store' e 'Date'...
+2025-08-22 11:55:28,274 - INFO - Iniciando engenharia de features...
+2025-08-22 11:55:28,898 - INFO - Features 'StateHoliday' e 'SchoolHoliday' convertidas para binário.
+2025-08-22 11:55:29,356 - INFO - Feature '7_days_avg_sales' (média móvel) criada.
+2025-08-22 11:55:29,356 - INFO - Engenharia de features concluída.
+2025-08-22 11:55:29,357 - INFO - Colunas após engenharia de features: ['Store', 'DayOfWeek', 'Date', 'Sales', 'Customers', 'Open', 'Promo', 'StateHoliday', 'SchoolHoliday', '7_days_avg_sales']
+2025-08-22 11:55:29,357 - INFO - Normalizando as features ['DayOfWeek', 'Customers', 'Open', 'Promo', '7_days_avg_sales'] e o target 'Sales' com MinMaxScaler.
+2025-08-22 11:55:29,515 - INFO - Iniciando criação de sequências para o modelo LSTM...
+2025-08-22 11:55:29,527 - INFO - Encontradas 1115 lojas únicas para processar.
+2025-08-22 11:56:00,155 - INFO - ==================================================
+2025-08-22 11:56:00,155 - INFO - EXECUÇÃO DO SCRIPT FINALIZADA
+2025-08-22 11:56:00,155 - INFO - ==================================================
