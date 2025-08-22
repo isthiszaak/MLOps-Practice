@@ -78,3 +78,28 @@ def preprocess_data(df, window_size=7, run_timestamp = 'none'):
     logger.info("Scaler salvo com sucesso.")
 
     return X, y
+
+
+def preprocess_input(X_input, window_size, scaler_path):
+    """
+    Pré-processa uma única entrada JSON para a LSTM.
+    X_input: DataFrame com 1 linha contendo as features.
+    Retorna: array (1, window_size, n_features)
+    """
+    # Carrega scaler já treinado no treino
+    with open(scaler_path, 'rb') as f:
+        scaler = pickle.load(f)
+    
+    # Lista de features usadas pelo modelo
+    features = ['DayOfWeek', 'Customers', 'Open', 'Promo', '7_days_avg_sales']
+    
+    # Normaliza apenas as features (sem Sales)
+    X_scaled = scaler.transform(
+        np.hstack([X_input[features].values, np.zeros((1, 1))])
+    )[:, :len(features)]  # mantém só as features
+    
+    # Cria sequência de tamanho window_size repetindo a entrada
+    X_seq = np.tile(X_scaled, (window_size, 1))
+    X_seq = X_seq.reshape(1, window_size, len(features))
+    
+    return X_seq, scaler

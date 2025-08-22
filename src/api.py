@@ -4,13 +4,13 @@ import pandas as pd
 import numpy as np
 import tensorflow as tf
 
-from src.preprocess import preprocess
+from src.preprocess import preprocess_input
 
 app = FastAPI(title = "API Previsão de Vendas")
 
 
 # Carrega modelo já treinado
-model = tf.keras.models.load_model("artifacts/best_model.h5")
+model = tf.keras.models.load_model("artifacts/best_model_20250822_122935.h5")
 
 @app.post("/predict")
 def predict (data: dict):
@@ -33,9 +33,17 @@ def predict (data: dict):
     df_input = pd.DataFrame([data])
     
     # Pré Processamento
-    X_input = preprocess(df_input)
+    scaler_path = 'artifacts/scaler_20250822_122935.pkl'
+    window_size = 7
+
+    X_input, scaler = preprocess_input(df_input, window_size= window_size, scaler_path = scaler_path)
 
     # Previsão
-    y_pred = model.predict(X_input)
+    y_pred_scaled = model.predict(X_input)
 
-    return {"predicted_sales": float(y_pred[0,0])}
+
+    dummy = np.zeros((1, len(scaler.scale_)))
+    dummy[0, -1] = y_pred_scaled  # coloca a previsão na posição do Sales
+    y_pred = scaler.inverse_transform(dummy)[:, -1]  # pega apenas a coluna Sales desnormalizada
+    
+    return {"predicted_sales": float(y_pred[0])}
